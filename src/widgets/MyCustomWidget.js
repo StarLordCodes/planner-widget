@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function MyCustomWidget() {
+  // State for stopwatch data
   const [stopwatchData, setStopwatchData] = useState({
     time: 0,
     isRunning: false,
@@ -9,6 +10,7 @@ export default function MyCustomWidget() {
     pause: [],
   });
 
+  // Start the stopwatch and update time every 10 milliseconds
   useEffect(() => {
     const interval = setInterval(() => {
       setStopwatchData((stopwatch) => {
@@ -27,6 +29,7 @@ export default function MyCustomWidget() {
     return () => clearInterval(interval);
   }, [stopwatchData]);
 
+  // Handle the start button click
   const handleStart = () => {
     setStopwatchData((stopwatch) => {
       return {
@@ -40,6 +43,7 @@ export default function MyCustomWidget() {
     });
   };
 
+  // Handle the stop button click
   const handleStop = () => {
     setStopwatchData((stopwatch) => {
       return {
@@ -55,19 +59,23 @@ export default function MyCustomWidget() {
     });
   };
 
+  // Handle the reset button click
   const handleReset = () => {
     setStopwatchData((stopwatch) => {
       return { ...stopwatch, time: 0, isRunning: false, lap: [] };
     });
   };
 
-  const handleLap = (id) => {
+  // Handle the lap button click
+  const handleLap = () => {
     setStopwatchData((stopwatch) => {
       return { ...stopwatch, lap: [...stopwatch.lap, stopwatch.time] };
     });
   };
+
   return (
     <div style={{ minWidth: 300 }}>
+      {/* Stopwatch Title */}
       <div
         style={{
           display: "flex",
@@ -77,11 +85,23 @@ export default function MyCustomWidget() {
       >
         <p>Stopwatch</p>
       </div>
-      <div className="stopwatchTime" style={{ textAlign: "center", fontWeight: "bold", fontSize: 20, padding: "1rem" }}>
+
+      {/* Stopwatch Display */}
+      <div
+        className="stopwatchTime"
+        style={{
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: 20,
+          padding: "1rem",
+        }}
+      >
         <p className="time-label">
           {new Date(stopwatchData.time).toISOString().slice(11, -1)}
         </p>
       </div>
+
+      {/* Stopwatch Controls with four buttons - start, stop, lap and reset*/}
       <div
         className="stopwatch-controls"
         style={{
@@ -100,8 +120,10 @@ export default function MyCustomWidget() {
             cursor: "pointer",
           }}
           onClick={handleStart}
-        >Start</button>
-         <button
+        >
+          Start
+        </button>
+        <button
           style={{
             background: "none",
             border: "none",
@@ -110,8 +132,10 @@ export default function MyCustomWidget() {
             cursor: "pointer",
           }}
           onClick={handleStop}
-        >Stop</button>
-         <button
+        >
+          Stop
+        </button>
+        <button
           style={{
             background: "none",
             border: "none",
@@ -120,8 +144,10 @@ export default function MyCustomWidget() {
             cursor: "pointer",
           }}
           onClick={handleLap}
-        >Lap</button>
-         <button
+        >
+          Lap
+        </button>
+        <button
           style={{
             background: "none",
             border: "none",
@@ -130,25 +156,29 @@ export default function MyCustomWidget() {
             cursor: "pointer",
           }}
           onClick={handleReset}
-        >Reset</button>
+        >
+          Reset
+        </button>
       </div>
-      {stopwatchData.lap.length!==0&&<p className="lap-label">Laps</p>}
-          <div className="lap-container">
-            {stopwatchData?.lap.length > 0 &&
-              stopwatchData?.lap.map((lap, index) => (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <p>Lap {index + 1}</p>
-                  <p className="lap-time-label" key={index}>
-                    {new Date(lap).toISOString().slice(11, -1)}
-                  </p>
-                </div>
-              ))}
-          </div>
+
+      {/* Lap Times */}
+      {stopwatchData.lap.length !== 0 && <p className="lap-label">Laps</p>}
+      <div className="lap-container">
+        {stopwatchData?.lap.length > 0 &&
+          stopwatchData?.lap.map((lap, index) => (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <p>Lap {index + 1}</p>
+              <p className="lap-time-label" key={index}>
+                {new Date(lap).toISOString().slice(11, -1)}
+              </p>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
